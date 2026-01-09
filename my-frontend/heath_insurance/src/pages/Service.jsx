@@ -1,41 +1,29 @@
 const Services = () => {
   return (
-    <div className="min-h-screen bg-gray-50 px-6 py-16">
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white px-6 py-20">
       <div className="max-w-6xl mx-auto">
-        <h1 className="text-3xl font-bold text-center text-blue-600 mb-10">
+        <h1 className="text-4xl font-bold text-center text-blue-700 mb-14">
           Our Services
         </h1>
 
-        <div className="grid md:grid-cols-3 gap-8">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-xl font-semibold text-blue-600 mb-2">
-              Health Insurance Coverage
-            </h3>
-            <p className="text-gray-600">
-              Comprehensive coverage for hospital visits, medical treatments,
-              and emergency healthcare services.
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-xl font-semibold text-blue-600 mb-2">
-              Online Registration
-            </h3>
-            <p className="text-gray-600">
-              Clients can easily register online and manage their insurance
-              information securely.
-            </p>
-          </div>
-
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-xl font-semibold text-blue-600 mb-2">
-              Client Dashboard
-            </h3>
-            <p className="text-gray-600">
-              Access personal details, insurance status, and service information
-              from one place.
-            </p>
-          </div>
+        <div className="grid md:grid-cols-3 gap-10">
+          {[
+            ["Health Insurance Coverage", "Complete healthcare coverage for individuals and families."],
+            ["Online Registration", "Secure and easy online insurance enrollment."],
+            ["Client Dashboard", "Centralized access to all insurance services."]
+          ].map(([title, desc]) => (
+            <div
+              key={title}
+              className="bg-white rounded-2xl p-8 shadow-lg border-l-4 border-blue-600"
+            >
+              <h3 className="text-2xl font-semibold text-blue-700 mb-4">
+                {title}
+              </h3>
+              <p className="text-gray-600 leading-relaxed">
+                {desc}
+              </p>
+            </div>
+          ))}
         </div>
       </div>
     </div>

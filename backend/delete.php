@@ -1,34 +1,33 @@
 <?php
-include ('./db.php');
+include("./db.php");
+include("./auth.php");
 
-session_start();
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: POST, DELETE, OPTIONS");
+header("Access-Control-Allow-Credentials: true");
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
+$data = json_decode(file_get_contents("php://input"), true);
+$userId = $_SESSION["user_id"];
+
+// Verify password
+$stmt = $con->prepare("SELECT password FROM customers WHERE id = ?");
+$stmt->bind_param("i", $userId);
+$stmt->execute();
+$result = $stmt->get_result();
+$user = $result->fetch_assoc();
+
+if (!password_verify($data["currentPassword"], $user["password"])) {
+    echo json_encode(["success" => false, "message" => "Incorrect password"]);
     exit;
 }
 
-$data = json_decode(file_get_contents("php://input"), true);
+// Delete account
+$stmt = $con->prepare("DELETE FROM customers WHERE id = ?");
+$stmt->bind_param("i", $userId);
+$stmt->execute();
 
-if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+session_unset();
+session_destroy();
+setcookie("user_login", "", time() - 3600, "/");
 
-    if (!$data || empty($data["idNumber"])) {
-        echo json_encode(["success" => false, "message" => "ID Number required"]);
-        exit;
-    }
-
-    $idNumber = $data["idNumber"];
-
-    $sql = "DELETE FROM customers WHERE id_number='$idNumber'";
-
-    if (mysqli_query($con, $sql)) {
-        session_destroy();
-        echo json_encode(["success" => true]);
-    } else {
-        echo json_encode(["success" => false, "message" => mysqli_error($con)]);
-    }
-}
+echo json_encode(["success" => true]);

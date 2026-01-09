@@ -1,188 +1,94 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 function Account() {
-  const navigate = useNavigate();
-
-  const [formData, setFormData] = useState({
-    firstName: "John",
-    lastName: "Doe",
-    idNumber: "ETH123456",
-    phone: "+251912345678",
-    dob: "1998-05-12",
-    gender: "Male",
-    address: "Kebele 04",
-    city: "Debre Markos",
-    region: "Amhara",
-    email: "john@example.com",
-    registrationDate: "2025-01-10",
-    password: "",
-    confirmPassword: ""
-  });
-
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  /* ================= UPDATE ACCOUNT ================= */
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    if (
-      formData.password &&
-      formData.password !== formData.confirmPassword
-    ) {
-      alert("Passwords do not match");
-      return;
-    }
-
-    fetch("http://localhost/projectbackend/update.php", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData)
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          alert("Account updated successfully");
-          setFormData({
-            ...formData,
-            password: "",
-            confirmPassword: ""
-          });
-        } else {
-          alert(data.message);
-        }
-      })
-      .catch(() => alert("Server error"));
-  };
-
-  /* ================= DELETE ACCOUNT ================= */
-  const handleDelete = () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete your account? This action cannot be undone."
-    );
-
-    if (!confirmDelete) return;
-
-    fetch("http://localhost/project/backend/delete.php", {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ idNumber: formData.idNumber })
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) {
-          alert("Account deleted successfully");
-          localStorage.clear();
-          navigate("/");
-        } else {
-          alert(data.message);
-        }
-      })
-      .catch(() => alert("Server error"));
-  };
+  const [formData, setFormData] = useState({});
 
   return (
-    <div className="max-w-4xl mx-auto my-12 bg-white p-8 shadow rounded-md">
-      <h2 className="text-2xl font-bold text-blue-600 mb-6">
-        My Account
-      </h2>
+    <div className="min-h-screen bg-gray-100 py-10 px-4">
+      <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl p-10">
+        <h2 className="text-3xl font-semibold text-gray-800 mb-8">
+          Account Information
+        </h2>
 
-      <form
-        onSubmit={handleSubmit}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4"
-      >
-        <div>
-          <label>First Name</label>
-          <input name="firstName" value={formData.firstName} onChange={handleChange}
-            className="w-full border px-3 py-2 rounded" />
-        </div>
+        <form className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {[
+            ["firstName", "First Name"],
+            ["lastName", "Last Name"],
+            ["phone", "Phone"],
+            ["gender", "Gender"],
+            ["city", "City"],
+            ["region", "Region"],
+          ].map(([name, label]) => (
+            <div key={name}>
+              <label className="block text-sm text-gray-600 mb-1">
+                {label}
+              </label>
+              <input
+                value={formData[name] || ""}
+                className="w-full border border-gray-300 rounded-lg px-3 py-2"
+              />
+            </div>
+          ))}
 
-        <div>
-          <label>Last Name</label>
-          <input name="lastName" value={formData.lastName} onChange={handleChange}
-            className="w-full border px-3 py-2 rounded" />
-        </div>
+          <div>
+            <label className="block text-sm text-gray-600 mb-1">
+              Date of Birth
+            </label>
+            <input
+              type="date"
+              value={formData.dob || ""}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            />
+          </div>
 
-        <div>
-          <label>ID Number</label>
-          <input name="idNumber" value={formData.idNumber} disabled
-            className="w-full border px-3 py-2 rounded bg-gray-100" />
-        </div>
+          <div className="md:col-span-2">
+            <label className="block text-sm text-gray-600 mb-1">
+              Address
+            </label>
+            <input
+              value={formData.address || ""}
+              className="w-full border border-gray-300 rounded-lg px-3 py-2"
+            />
+          </div>
 
-        <div>
-          <label>Phone</label>
-          <input name="phone" value={formData.phone} onChange={handleChange}
-            className="w-full border px-3 py-2 rounded" />
-        </div>
+          <div className="md:col-span-2 border-t pt-6 mt-4">
+            <h3 className="text-lg font-medium text-gray-700 mb-4">
+              Security
+            </h3>
 
-        <div>
-          <label>Date of Birth</label>
-          <input type="date" name="dob" value={formData.dob} onChange={handleChange}
-            className="w-full border px-3 py-2 rounded" />
-        </div>
+            <input
+              type="password"
+              placeholder="Current Password"
+              className="w-full border border-gray-300 rounded-lg px-3 py-2 mb-4"
+            />
 
-        <div>
-          <label>Gender</label>
-          <input name="gender" value={formData.gender} onChange={handleChange}
-            className="w-full border px-3 py-2 rounded" />
-        </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <input
+                type="password"
+                placeholder="New Password"
+                className="border border-gray-300 rounded-lg px-3 py-2"
+              />
+              <input
+                type="password"
+                placeholder="Confirm Password"
+                className="border border-gray-300 rounded-lg px-3 py-2"
+              />
+            </div>
+          </div>
 
-        <div>
-          <label>Address</label>
-          <input name="address" value={formData.address} onChange={handleChange}
-            className="w-full border px-3 py-2 rounded" />
-        </div>
-
-        <div>
-          <label>City</label>
-          <input name="city" value={formData.city} onChange={handleChange}
-            className="w-full border px-3 py-2 rounded" />
-        </div>
-
-        <div>
-          <label>Region</label>
-          <input name="region" value={formData.region} onChange={handleChange}
-            className="w-full border px-3 py-2 rounded" />
-        </div>
-
-        <div>
-          <label>Email</label>
-          <input type="email" name="email" value={formData.email} onChange={handleChange}
-            className="w-full border px-3 py-2 rounded" />
-        </div>
-
-        <div>
-          <label>Registration Date</label>
-          <input value={formData.registrationDate} disabled
-            className="w-full border px-3 py-2 rounded bg-gray-100" />
-        </div>
-
-        <div>
-          <label>Password</label>
-          <input type="password" name="password" onChange={handleChange}
-            className="w-full border px-3 py-2 rounded" />
-        </div>
-
-        <div>
-          <label>Confirm Password</label>
-          <input type="password" name="confirmPassword" onChange={handleChange}
-            className="w-full border px-3 py-2 rounded" />
-        </div>
-
-        <div className="md:col-span-2 flex flex-col md:flex-row gap-4 mt-4">
-          <button type="submit"
-            className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
-            Update Account
-          </button>
-
-          <button type="button" onClick={handleDelete}
-            className="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700">
-            Delete Account
-          </button>
-        </div>
-      </form>
+          <div className="md:col-span-2 flex gap-4 mt-8">
+            <button className="flex-1 bg-blue-600 text-white py-3 rounded-lg font-medium">
+              Update Account
+            </button>
+            <button
+              type="button"
+              className="flex-1 bg-red-600 text-white py-3 rounded-lg font-medium"
+            >
+              Delete Account
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

@@ -1,24 +1,24 @@
 const About = () => {
   return (
-    <div className="min-h-screen bg-white px-6 py-16">
+    <div className="min-h-screen bg-gradient-to-b from-blue-50 to-white px-6 py-20">
       <div className="max-w-4xl mx-auto text-center">
-        <h1 className="text-3xl font-bold text-blue-600 mb-6">
-          About Us
+        <h1 className="text-4xl font-bold text-blue-700 mb-8">
+          About Healthcare Insurance
         </h1>
 
-        <p className="text-gray-600 mb-6">
-          Healthcare Insurance is dedicated to providing affordable and reliable
-          health insurance services to individuals and families.
+        <p className="text-gray-700 text-lg leading-relaxed mb-6">
+          Healthcare Insurance is dedicated to providing affordable,
+          reliable, and accessible health insurance services.
         </p>
 
-        <p className="text-gray-600 mb-6">
-          Our system is designed to simplify insurance registration, management,
-          and access to healthcare-related services using modern technology.
+        <p className="text-gray-600 leading-relaxed mb-6">
+          Our system simplifies insurance registration, management,
+          and healthcare access using modern web technologies.
         </p>
 
-        <p className="text-gray-600">
-          This project is developed as a university project to demonstrate the
-          application of web technologies in healthcare insurance management.
+        <p className="text-gray-600 leading-relaxed">
+          This platform is developed as a university project to
+          demonstrate real-world healthcare insurance management solutions.
         </p>
       </div>
     </div>
