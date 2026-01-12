@@ -1,68 +1,53 @@
 <?php
-include("./db.php");
+include ('./db.php');
 session_start();
 
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: http://localhost:3000");
+header("Access-Control-Allow-Origin: http://localhost:5173");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
+
 
 $data = json_decode(file_get_contents("php://input"), true);
+$email = $data["email"];
+$password = $data["password"] ;
 
-$email = $data["email"] ?? "";
-$password = $data["password"] ?? "";
 
-if (empty($email) || empty($password)) {
+$q = "SELECT email, password FROM customers WHERE email = '$email'";
+$result = mysqli_query($con, $q);
+
+if(mysqli_num_rows($result)> 0){
+    $user = mysqli_fetch_assoc($result);
+        if( $user['email']==$email && $user['password']==$password){
+            // $_SESSION['password'] = $user['password'];
+            $_SESSION['email'] = $user['email'];
+            
+            setcookie("get_email","$email");
+            setcookie("get_password","$password");
+            
+            echo json_encode([
+                "status" => "success",
+                "message" => "Login Successfull",
+                "email" => $user['email']
+        ]);
+        }
+        else {
+            echo json_encode([
+            "status" => "error",
+            "message" => "Invalid email or password"
+         ]);
+        }
+}
+else{
     echo json_encode([
-        "success" => false,
-        "message" => "Email and password are required"
+        "status" => "error",
+        "message" => "user not found"
     ]);
-    exit;
 }
 
-// Fetch user
-$stmt = $con->prepare("SELECT * FROM customers WHERE email = ?");
-$stmt->bind_param("s", $email);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result->num_rows === 0) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Invalid email or password"
-    ]);
-    exit;
-}
-
-$user = $result->fetch_assoc();
-
-// Verify password
-if (!password_verify($password, $user["password"])) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Invalid email or password"
-    ]);
-    exit;
-}
-
-// SESSION (expires in 30 minutes)
-session_regenerate_id(true);
-$_SESSION["user_id"] = $user["id"];
-$_SESSION["last_activity"] = time();
-
-// COOKIE (remember login)
-setcookie(
-    "user_login",
-    $user["id"],
-    time() + (86400 * 7), // 7 days
-    "/",
-    "",
-    false,
-    true
-);
-
-echo json_encode([
-    "success" => true,
-    "message" => "Login successful"
-]);

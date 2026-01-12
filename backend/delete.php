@@ -1,33 +1,59 @@
 <?php
+
 include("./db.php");
-include("./auth.php");
+session_start();
 
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 
-$data = json_decode(file_get_contents("php://input"), true);
-$userId = $_SESSION["user_id"];
 
-// Verify password
-$stmt = $con->prepare("SELECT password FROM customers WHERE id = ?");
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
-
-if (!password_verify($data["currentPassword"], $user["password"])) {
-    echo json_encode(["success" => false, "message" => "Incorrect password"]);
-    exit;
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
 }
+$data = json_decode(file_get_contents("php://input"), true);
 
-// Delete account
-$stmt = $con->prepare("DELETE FROM customers WHERE id = ?");
-$stmt->bind_param("i", $userId);
-$stmt->execute();
+$email = $data["email"];
+$password = $data["password"] ;
 
-session_unset();
-session_destroy();
-setcookie("user_login", "", time() - 3600, "/");
 
-echo json_encode(["success" => true]);
+$q = "SELECT email, password FROM customers WHERE email = '$email'";
+$up = "delete from customers where email='$email'";
+$result = mysqli_query($con, $q);
+
+if(mysqli_num_rows($result)> 0){
+    while($user = mysqli_fetch_assoc($result)){
+        if( $user['email']==$email && $user['password']==$password){
+            if(mysqli_query($con , $up)){
+                
+                session_unset();
+                session_destroy();
+                
+                if (isset($_COOKIE['PHPSESSID'])) {
+                setcookie('PHPSESSID', '', time() - 3600, '/');
+                }
+
+                echo json_encode([
+                "status" => "success",
+                "message" => "user deleted successful"
+        ]);
+            }
+            
+        }
+        else {
+            echo json_encode([
+            "status" => "error",
+            "message" => "Invalid email or password"
+         ]);
+        }
+    }
+    
+}
+else{
+    echo json_encode([
+        "status" => "error",
+        "message" => "user not found"
+    ]);
+}

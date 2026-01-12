@@ -1,36 +1,31 @@
 <?php
 include("./db.php");
-include("./auth.php");
+
 
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 
-$userId = $_SESSION["user_id"];
+$data = json_decode(file_get_contents("php://input"), true);
 
-$stmt = $con->prepare("
-SELECT 
-  firstName,
-  lastName,
-  idNumber,
-  phone,
-  dob,
-  gender,
-  address,
-  city,
-  region,
-  email,
-  rdate AS registrationDate
-FROM customers WHERE id = ?
-");
+$email=$data['email'];
 
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$result = $stmt->get_result();
+$q = "SELECT * FROM customers WHERE email = '$email'";
+$result = mysqli_query($con, $q);
 
-$user = $result->fetch_assoc();
+if($result && mysqli_num_rows($result)> 0){
+    $user = mysqli_fetch_assoc($result);
+            echo json_encode([
+            "status" => "success",
+            "message" => "data fetched successful",
+            "data"=>$user
+        ]);
+}
+else{
+    echo json_encode([
+        "status" => "error",
+        "message" => "user not found"
+    ]);
+}
 
-echo json_encode([
-    "success" => true,
-    "user" => $user
-]);

@@ -1,84 +1,40 @@
 <?php
-include("./db.php");
+include ('./db.php');
 
 header("Content-Type: application/json");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Headers: Content-Type");
-header("Access-Control-Allow-Methods: POST");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 
-$data = json_decode(file_get_contents("php://input"), true);
-
-// Basic validation
-if (
-    empty($data["email"]) ||
-    empty($data["password"]) ||
-    empty($data["firstName"])
-) {
-    echo json_encode([
-        "success" => false,
-        "message" => "Required fields are missing"
-    ]);
-    exit;
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
 }
 
-$firstName = $data["firstName"];
-$lastName  = $data["lastName"];
-$idNumber  = $data["idNumber"];
-$phone     = $data["phone"];
-$dob       = $data["dob"];
-$gender    = $data["gender"];
-$address   = $data["address"];
-$city      = $data["city"];
-$region    = $data["region"];
-$email     = $data["email"];
-$password  = password_hash($data["password"], PASSWORD_DEFAULT);
-$rdate     = date("Y-m-d");
+$data= json_decode(file_get_contents("php://input"), true);
+    $firstName = $data["firstName"];
+    $lastName  = $data["lastName"];
+    $idNumber  = $data["idNumber"];
+    $phone     = $data["phone"];
+    $dob       = $data["dob"];
+    $gender    = $data["gender"];
+    $address   = $data["address"];
+    $city      = $data["city"];
+    $region    = $data["region"];
+    $email     = $data["email"];
+    // $password  = password_hash($data["password"], PASSWORD_DEFAULT);
+    $password=$data["password"];
+    $rdate     = date('Y/M');
 
-// Check if email already exists
-$check = $con->prepare("SELECT email FROM customers WHERE email = ?");
-$check->bind_param("s", $email);
-$check->execute();
-$check->store_result();
-
-if ($check->num_rows > 0) {
+$sql = "INSERT INTO customers  VALUES  ('$firstName','$lastName','$idNumber','$phone','$dob','$gender','$address','$city','$region','$email','$password','$rdate')";
+if (mysqli_query($con, $sql)) {
     echo json_encode([
-        "success" => false,
-        "message" => "Email already registered"
-    ]);
-    exit;
-}
-
-// Insert user
-$stmt = $con->prepare("
-    INSERT INTO customers
-    (firstName, lastName, idNumber, phone, dob, gender, address, city, region, email, password, rdate)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-");
-
-$stmt->bind_param(
-    "ssssssssssss",
-    $firstName,
-    $lastName,
-    $idNumber,
-    $phone,
-    $dob,
-    $gender,
-    $address,
-    $city,
-    $region,
-    $email,
-    $password,
-    $rdate
-);
-
-if ($stmt->execute()) {
-    echo json_encode([
-        "success" => true,
-        "message" => "Registration successful"
+        "status" => "success",
+        "message" => "Customer registered successfully"
     ]);
 } else {
     echo json_encode([
-        "success" => false,
-        "message" => "Registration failed"
+        "status" => "error",
+        "message" => "Failed to register customer"
     ]);
 }

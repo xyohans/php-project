@@ -1,66 +1,61 @@
 <?php
+
 include("./db.php");
-include("./auth.php");
+// include("./auth.php");
 
 header("Content-Type: application/json");
-header("Access-Control-Allow-Origin: http://localhost:5173");
-header("Access-Control-Allow-Credentials: true");
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Content-Type");
+header("Access-Control-Allow-Methods: POST, OPTIONS");
 
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 $data = json_decode(file_get_contents("php://input"), true);
-$userId = $_SESSION["user_id"];
 
-// Verify current password
-$stmt = $con->prepare("SELECT password FROM customers WHERE id = ?");
-$stmt->bind_param("i", $userId);
-$stmt->execute();
-$result = $stmt->get_result();
-$user = $result->fetch_assoc();
+$firstName = $data["first_name"];
+$lastName = $data["last_name"];
+$idNumber= $data["idNumber"];
+$phone = $data["phone"];
+$dob = $data["dob"];
+$gender = $data["gender"];
+$address = $data["address"];
+$city = $data["city"];
+$region= $data["region"];
 
-if (!password_verify($data["currentPassword"], $user["password"])) {
-    echo json_encode(["success" => false, "message" => "Incorrect password"]);
-    exit;
+$email = $data["email"];
+$password = $data["password"] ;
+
+
+$q = "SELECT email, password FROM customers WHERE email = '$email'";
+$up = "update customers set first_name='$firstName', last_name='$lastName' , phone='$phone', dob='$dob', gender='$gender' , address='$address' ,city='$city', region='$region' where email='$email'";
+$result = mysqli_query($con, $q);
+
+if(mysqli_num_rows($result)> 0){
+    while($user = mysqli_fetch_assoc($result)){
+        if( $user['email']==$email && $user['password']==$password){
+            if(mysqli_query($con , $up)){
+                echo json_encode([
+                "status" => "success",
+                "message" => "user updated"
+        ]);
+            }
+            
+        }
+        else {
+            echo json_encode([
+            "status" => "error",
+            "message" => "Invalid email or password"
+         ]);
+        }
+    }
+    
 }
-
-// Optional new password
-$passwordSQL = "";
-$params = [
-    $data["firstName"],
-    $data["lastName"],
-    $data["phone"],
-    $data["dob"],
-    $data["gender"],
-    $data["address"],
-    $data["city"],
-    $data["region"],
-    $data["email"]
-];
-
-if (!empty($data["password"])) {
-    $hashed = password_hash($data["password"], PASSWORD_DEFAULT);
-    $passwordSQL = ", password=?";
-    $params[] = $hashed;
+else{
+    echo json_encode([
+        "status" => "error",
+        "message" => "user not found"
+    ]);
 }
-
-$params[] = $userId;
-
-// Build query
-$sql = "
-UPDATE customers SET
-  firstName=?,
-  lastName=?,
-  phone=?,
-  dob=?,
-  gender=?,
-  address=?,
-  city=?,
-  region=?,
-  email=?
-  $passwordSQL
-WHERE id=?
-";
-
-$stmt = $con->prepare($sql);
-$stmt->bind_param(str_repeat("s", count($params) - 1) . "i", ...$params);
-$stmt->execute();
-
-echo json_encode(["success" => true]);
