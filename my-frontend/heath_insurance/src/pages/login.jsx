@@ -1,53 +1,113 @@
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useState,useEffect} from "react";
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const navigate=useNavigate();
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: ""
+  });
+useEffect(() => {
+  const loadCookies = async () => {
+    const res = await fetch(
+      "http://localhost/project/backend/cookie.php",
+      { credentials: "include" }
+    );
+    const data = await res.json();
+
+    if (data.email && data.password) {
+      setFormData({
+        email: data.email,
+        password: data.password
+      });
+    }
+  };
+
+  loadCookies();
+}, []);
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!formData.email || !formData.password) {
+      alert("Please enter both email and password");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost/project/backend/login.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(formData)
+      });
+
+      const data = await response.json();
+
+      if (data.status === "success") {
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("email", data.email);
+        alert(data.message); 
+        navigate("/account"); 
+      } else {
+        alert(data.message); 
+      }
+      alert(data.message);
+
+    } catch (error) {
+      alert("Server error. Please try again.");
+      console.error(error);
+    }
+  };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-10">
-        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">
-          Welcome Back
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
+      <div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        
+        <h2 className="text-2xl font-bold text-center text-blue-600 mb-6">
+          Client Login
         </h2>
-        <p className="text-center text-gray-500 mb-8">
-          Login to your account
-        </p>
 
-        <form className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Email
-            </label>
-            <input
+            <label className="block text-gray-700 mb-1">Email</label>
+            <input 
+              onChange={handleChange}
+              name="email"
+              value={formData.email}
               type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              placeholder="example@email.com"
+              className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
           <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Password
-            </label>
+            <label className="block text-gray-700 mb-1">Password</label>
             <input
+              onChange={handleChange}
+              name="password"
+              value={formData.password}
               type="password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-600"
+              placeholder="********"
+              className="w-full border px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
           </div>
 
-          <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-medium">
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
+          >
             Login
           </button>
         </form>
 
-        <p className="text-center text-gray-600 mt-6">
-          Don’t have an account?{" "}
-          <Link to="/register" className="text-blue-600 font-medium">
+        <p className="text-center text-gray-600 mt-4">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-blue-600 hover:underline">
             Register
           </Link>
         </p>

@@ -1,115 +1,96 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import './register.css'
 
 const Register = () => {
-  const [formData, setFormData] = useState({});
+
+  const navigate=useNavigate();
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    idNumber: "",
+    phone: "",
+    dob: "",
+    gender: "",
+    address: "",
+    city: "",
+    region: "",
+    email: "",
+    password: "",
+    confirmPassword: ""
+  });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (formData.password !== formData.confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    const response = await fetch("http://localhost/project/backend/add.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(formData)
+    });
+
+    const data = await response.json(); 
+    if(data.status == "success")  {
+      alert(data.message); 
+      navigate("/login");
+    }
+    else{
+      alert(data.message);
+    }     
+
+  } catch (error) {
+    alert("Server error. Please try again.");
+  }
+};
+
+
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
-      <div className="w-full max-w-3xl bg-white rounded-2xl shadow-xl p-10">
-        <h2 className="text-3xl font-semibold text-center text-gray-800 mb-2">
-          Create an Account
+    <div className="container">
+      <div className="content">
+        <div className="sty">
+        <h2 >
+          Client Registration
         </h2>
-        <p className="text-center text-gray-500 mb-8">
-          Please fill in the information below
-        </p>
 
-        <form className="grid grid-cols-1 md:grid-cols-2 gap-5">
-          {[
-            ["firstName", "First Name"],
-            ["lastName", "Last Name"],
-            ["idNumber", "ID Number"],
-            ["phone", "Phone"],
-            ["gender", "Gender"],
-            ["city", "City"],
-            ["region", "Region"],
-          ].map(([name, label]) => (
-            <div key={name}>
-              <label className="block text-sm text-gray-600 mb-1">
-                {label}
-              </label>
-              <input
-                name={name}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-600"
-              />
-            </div>
-          ))}
-
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Date of Birth
-            </label>
-            <input
-              type="date"
-              name="dob"
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-600"
-            />
+        <form  onSubmit={handleSubmit}>
+          <input name="firstName" value={formData.firstName} onChange={handleChange} placeholder="First Name"  /><br/>
+          <input name="lastName" value={formData.lastName} onChange={handleChange} placeholder="Last Name"  /><br/>
+          <input name="idNumber" value={formData.idNumber} onChange={handleChange} placeholder="ID Number"  /><br/>
+          <input name="phone" value={formData.phone} onChange={handleChange} placeholder="Phone"  /><br/>
+          <input name="dob" value={formData.dob} type="date" placeholder="date of birth " onChange={handleChange}  /><br/>
+          <input name="gender" value={formData.gender} onChange={handleChange} placeholder="Gender" /><br/>
+          <input name="address" value={formData.address} onChange={handleChange} placeholder="Address"  /><br/>
+          <input name="city" value={formData.city} onChange={handleChange} placeholder="City"  /><br/>
+          <input name="region" value={formData.region} onChange={handleChange} placeholder="Region"  /><br/>
+          <input name="email" value={formData.email} type="email" onChange={handleChange} placeholder="Email"  /><br/>
+          <input name="password" value={formData.password} type="password" onChange={handleChange} placeholder="Password"  /><br/>
+          <input name="confirmPassword" value={formData.confirmPassword} type="password" onChange={handleChange} placeholder="Confirm Password"  /><br/>
+          <div className="btn">
+            <button type ="submit">
+              Register
+            </button>
           </div>
-
-          <div className="md:col-span-2">
-            <label className="block text-sm text-gray-600 mb-1">
-              Address
-            </label>
-            <input
-              name="address"
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-600"
-            />
-          </div>
-
-          <div className="md:col-span-2">
-            <label className="block text-sm text-gray-600 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              name="email"
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-600"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              name="password"
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-600"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm text-gray-600 mb-1">
-              Confirm Password
-            </label>
-            <input
-              type="password"
-              name="confirmPassword"
-              onChange={handleChange}
-              className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-1 focus:ring-blue-600"
-            />
-          </div>
-
-          <button className="md:col-span-2 bg-blue-600 text-white py-3 rounded-lg font-medium">
-            Register
-          </button>
         </form>
 
-        <p className="text-center text-gray-600 mt-6">
+        <p >
           Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 font-medium">
+          <Link to="/login" >
             Login
           </Link>
         </p>
+        </div>
       </div>
     </div>
   );

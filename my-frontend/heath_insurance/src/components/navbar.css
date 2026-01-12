@@ -1,0 +1,7 @@
+nav{
+    display: flex;
+    justify-content: space-between;
+}
+.title span{
+    font-size:1.5rem ;
+}
