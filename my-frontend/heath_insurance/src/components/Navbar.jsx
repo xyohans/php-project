@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import './navbar.css'
+import logo from './logo.jpg'
 
 function Navbar() {
   return (
@@ -7,7 +8,7 @@ function Navbar() {
       
       {/* Logo */}
       <Link to="/" className="title">
-        <img src="/logo.jpg" alt="Logo" />
+        {/* <img src={logo} alt="Logo" /> */}
         <span >
           Healthcare Insurance
         </span>
@@ -23,17 +24,17 @@ function Navbar() {
       </ul>
 
       {/* Actions */}
-      <div className="">
+      <div className="btn">
         <Link
           to="/login"
-          className=""
+          className="login"
         >
           Login
         </Link>
 
         <Link
           to="/register"
-          className=""
+          className="register"
         >
           Get Started
         </Link>

@@ -1,7 +1,59 @@
-nav{
+body, html{
+    margin:0;
+    
+}
+
+.navbar{
     display: flex;
     justify-content: space-between;
+    text-decoration: none;
+    color: white;
+    background-color: rgba(23, 23, 24, 0.973);
+    margin: 0;
+    padding: 10px;
+    position: sticky;
 }
+
 .title span{
     font-size:1.5rem ;
+}
+.title{
+    text-decoration: none;
+}
+.title:visited{
+    color: white;
+}
+
+nav ul li{
+    list-style-type: none;
+    text-decoration: none;
+}
+nav ul{
+    display: flex;
+    gap:10px;
+    
+}
+nav ul li.active{
+    background-color: red;
+}
+
+.btn{
+    display: flex;
+    gap:9px;
+    height: 100%;
+    
+}
+.register  {
+    background-color: rgba(7, 143, 235, 0.959);
+    color:white;
+    padding:10px;
+    text-align: center;
+    border-radius: 40px;
+}
+.login{
+    background-color: black;
+    color:white;
+    padding:10px;
+    text-align: center;
+    border-radius: 40px;
 }
