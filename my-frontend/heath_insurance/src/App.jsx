@@ -8,6 +8,7 @@ import Home from "./pages/Home";
 import Login from "./pages/login";
 import Register from "./pages/register";
 import Services from "./pages/Service";
+import MyServices from "./pages/MyServices";
 import About from "./pages/About";
 import Contact from "./pages/Contact";
 import Account from "./pages/Account";
@@ -38,6 +39,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/my_services" element={<MyServices />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
 

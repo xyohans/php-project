@@ -8,7 +8,7 @@ function Navbar() {
       
       {/* Logo */}
       <Link to="/" className="title">
-        {/* <img src={logo} alt="Logo" /> */}
+        <img src={logo} alt="Logo" />
         <span >
           Healthcare Insurance
         </span>
@@ -16,11 +16,12 @@ function Navbar() {
 
       {/* Navigation */}
       <ul >
-        <li><Link to="/" >Home</Link></li>
-        <li><Link to="/services" >Services</Link></li>
-        <li><Link to="/about" >About Us</Link></li>
-        <li><Link to="/contact" >Contact Us</Link></li>
-        <li><Link to="/account" >Account</Link></li>
+        <li><Link to="/" className="naves">Home</Link></li>
+        <li><Link to="/services" className="naves">Services</Link></li>
+        <li><Link to="/my_services" className="naves">MyServices</Link></li>
+        <li><Link to="/about" className="naves">About Us</Link></li>
+        <li><Link to="/contact"className="naves" >Contact Us</Link></li>
+        <li><Link to="/account" className="naves">Account</Link></li>
       </ul>
 
       {/* Actions */}

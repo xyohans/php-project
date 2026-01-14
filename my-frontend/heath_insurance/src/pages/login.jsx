@@ -52,7 +52,7 @@ useEffect(() => {
         localStorage.setItem("isLoggedIn", "true");
         localStorage.setItem("email", data.email);
         alert(data.message); 
-        navigate("/account"); 
+        navigate("/services"); 
       } else {
         alert(data.message); 
       }

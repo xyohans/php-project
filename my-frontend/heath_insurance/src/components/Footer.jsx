@@ -1,40 +1,41 @@
 import { Link } from "react-router-dom";
+import './foote.css'
 
 const Footer = () => {
   return (
-    <footer className="bg-gradient-to-r from-blue-800 to-blue-700 text-white">
-      <div className="max-w-6xl mx-auto px-6 py-14 grid md:grid-cols-3 gap-10">
+    <footer className="">
+      <div className="continer">
 
-        <div>
-          <h2 className="text-2xl font-bold mb-4">
+        <div className="title-footer">
+          <h2 className="">
             Healthcare Insurance
           </h2>
-          <p className="text-blue-100 leading-relaxed">
+          <p className="">
             Building a healthier future through affordable and reliable insurance services.
           </p>
         </div>
 
         <div>
-          <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
-          <ul className="space-y-2 text-blue-100">
-            <li><Link to="/">Home</Link></li>
-            <li><Link to="/services">Services</Link></li>
-            <li><Link to="/about">About Us</Link></li>
-            <li><Link to="/contact">Contact</Link></li>
-            <li><Link to="/login">Login</Link></li>
+          <h3 className="">Quick Links</h3>
+          <ul >
+            <li><Link to="/" className="links">Home</Link></li>
+            <li><Link to="/services" className="links">Services</Link></li>
+            <li><Link to="/about" className="links">About Us</Link></li>
+            <li><Link to="/contact" className="links">Contact</Link></li>
+            <li><Link to="/login" className="links">Login</Link></li>
           </ul>
         </div>
 
         <div>
-          <h3 className="text-xl font-semibold mb-4">Contact</h3>
-          <p className="text-blue-100">📞 +251 911 234 567</p>
-          <p className="text-blue-100">📧 info@healthcareinsurance.com</p>
-          <p className="text-blue-100">📍 Debre Markos, Ethiopia</p>
+          <h3 className="">Contact</h3>
+          <p className="">📞 +251 911 234 567</p>
+          <p className="">📧 info@healthcareinsurance.com</p>
+          <p className="">📍 Debre Markos, Ethiopia</p>
         </div>
       </div>
 
-      <div className="border-t border-blue-600 text-center py-4 text-blue-100">
-        © {new Date().getFullYear()} Healthcare Insurance. All rights reserved.
+      <div className="copy-right">
+        &copy; {new Date().getFullYear()} Healthcare Insurance. All rights reserved.
       </div>
     </footer>
   );
