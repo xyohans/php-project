@@ -1,0 +1,118 @@
+/* PAGE WRAPPER WITH GRADIENT */
+.acc-b {
+  min-height: 100vh; /* full viewport height */
+  padding: 60px 20px;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ACCOUNT CONTAINER */
+.account-container {
+  max-width: 700px;
+  width: 100%;
+  background-color: #ffffff;
+  padding: 30px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+}
+
+/* TITLE */
+.account-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #2563eb;
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+/* FORM GRID */
+.account-form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+@media (min-width: 768px) {
+  .account-form {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* INPUT FIELDS */
+.account-input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.account-input:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+
+.account-disabled {
+  background-color: #e5e7eb;
+}
+
+/* BUTTONS GROUP */
+.account-button-group {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+@media (min-width: 768px) {
+  .account-button-group {
+    flex-direction: row;
+  }
+}
+
+.account-btn {
+  flex: 1;
+  padding: 12px;
+  font-weight: 600;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: #ffffff;
+}
+
+/* BUTTON TYPES */
+.update-btn {
+  background-color: #2563eb;
+}
+.update-btn:hover {
+  background-color: #1d4ed8;
+}
+
+.delete-btn {
+  background-color: #dc2626;
+}
+.delete-btn:hover {
+  background-color: #b91c1c;
+}
+
+.logout-btn {
+  background-color: #6b7280;
+}
+.logout-btn:hover {
+  background-color: #4b5563;
+}
+
+/* LABELS */
+.account-form label {
+  font-weight: 500;
+  margin-bottom: 4px;
+  display: block;
+  color: #374151;
+}

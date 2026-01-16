@@ -1,0 +1,96 @@
+/* PAGE WRAPPER */
+.service-page {
+    min-height: 100vh;
+    padding: 80px 20px;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    color: #6b7280;
+}
+
+/* PAGE TITLE */
+.service-title {
+    text-align: center;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 50px;
+}
+
+/* GRID */
+.service-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* SERVICE CARD */
+.service-card {
+    background-color: #ffffff;
+    padding: 30px 25px;
+    border-radius: 14px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 35px rgba(0, 0, 0, 0.12);
+}
+
+/* CARD TITLE */
+.service-card-title {
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+    color: #1f2933;
+}
+
+/* CARD DESCRIPTION */
+.service-card-desc {
+    font-size: 0.95rem;
+    color: #4b5563;
+    line-height: 1.6;
+    margin-bottom: 12px;
+}
+
+/* CARD PRICE */
+.service-card-price {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2563eb;
+    margin-bottom: 15px;
+}
+
+/* BUTTON */
+.service-card-button {
+    padding: 12px 18px;
+    background: linear-gradient(135deg, #2563eb, #1d4ed8);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.service-card-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(37, 99, 235, 0.4);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .service-title {
+        font-size: 2rem;
+        margin-bottom: 30px;
+    }
+
+    .service-grid {
+        gap: 20px;
+    }
+}

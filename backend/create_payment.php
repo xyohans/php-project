@@ -8,7 +8,7 @@ header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Headers: Content-Type");
 header("Access-Control-Allow-Methods: POST");
 
-// 🔐 1️⃣ AUTH CHECK
+
 $customer_email = $_SESSION['email'] ?? ($_COOKIE['get_email'] ?? null);
 
 if (!$customer_email) {
@@ -19,7 +19,7 @@ if (!$customer_email) {
     exit;
 }
 
-// 🔎 2️⃣ READ REQUEST BODY
+
 $data = json_decode(file_get_contents("php://input"), true);
 
 $service_id = $data['service_id'] ?? null;

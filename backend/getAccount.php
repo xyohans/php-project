@@ -11,7 +11,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 $email=$data['email'];
 
-$q = "SELECT * FROM customers WHERE email = '$email'";
+$q = "SELECT first_name, last_name, id_number, phone, dob, gender, address, city, region, email, created_at FROM customers WHERE email = '$email'";
 $result = mysqli_query($con, $q);
 
 if($result && mysqli_num_rows($result)> 0){

@@ -1,0 +1,97 @@
+/* Footer Base */
+footer {
+    background: linear-gradient(90deg, #111827, #1f2933);
+    color: #e5e7eb;
+    padding: 40px 20px 15px;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Main Container */
+.continer {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 40px;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 30px;
+}
+
+/* Footer Sections */
+.continer div {
+    min-width: 220px;
+    padding: 10px 20px;
+}
+
+/* Footer Titles */
+.continer h3,
+.title-footer h2 {
+    color: #ffffff;
+    margin-bottom: 15px;
+    font-size: 1.2rem;
+}
+
+/* Links */
+.links {
+    text-decoration: none;
+    color: #cbd5f5;
+    transition: color 0.3s ease;
+}
+
+.links:hover {
+    color: #38bdf8;
+}
+
+.links:visited {
+    color: #cbd5f5;
+}
+
+/* Lists */
+li {
+    list-style: none;
+    margin: 8px 0;
+}
+
+/* Title / About Section */
+.title-footer {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 350px;
+}
+
+.title-footer p {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    padding: 15px;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+/* Copyright */
+.copy-right {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 0.9rem;
+    color: #9ca3af;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .continer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .continer div {
+        padding: 0;
+    }
+
+    .title-footer {
+        align-items: center;
+    }
+
+    .title-footer p {
+        text-align: center;
+    }
+}
