@@ -27,38 +27,41 @@ const Register = () => {
   };
 
   
-  const validate = () => {
-    let newErrors = {};
+const validate = () => {
+  let newErrors = {};
 
-    // Empty checks
-    Object.keys(formData).forEach((field) => {
-      if (!formData[field]) {
-        newErrors[field] = "This field is required";
-      }
-    });
+  if (!formData.firstName) newErrors.firstName = "Required";
+  if (!formData.lastName) newErrors.lastName = "Required";
+  if (!formData.idNumber) newErrors.idNumber = "Required";
+  if (!formData.phone) newErrors.phone = "Required";
+  if (!formData.dob) newErrors.dob = "Required";
+  if (!formData.gender) newErrors.gender = "Required";
+  if (!formData.address) newErrors.address = "Required";
+  if (!formData.city) newErrors.city = "Required";
+  if (!formData.region) newErrors.region = "Required";
 
-    // Email validation
-    if (formData.email && !/^\S+@\S+\.\S+$/.test(formData.email)) {
-      newErrors.email = "Invalid email address";
-    }
+  if (!formData.email) {
+    newErrors.email = "Required";
+  } else if (!/^\S+@\S+\.\S+$/.test(formData.email)) {
+    newErrors.email = "Invalid email";
+  }
 
-    // Phone validation (digits only, 10–15 chars)
-    if (formData.phone && !/^[0-9]{10,15}$/.test(formData.phone)) {
-      newErrors.phone = "Invalid phone number";
-    }
+  if (formData.phone && !/^[0-9]{10,15}$/.test(formData.phone)) {
+    newErrors.phone = "Invalid phone number";
+  }
 
-    // Password rules
-    if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
-    }
+  if (!formData.password || formData.password.length < 6) {
+    newErrors.password = "Min 6 characters";
+  }
 
-    if (formData.password !== formData.confirmPassword) {
-      newErrors.confirmPassword = "Passwords do not match";
-    }
+  if (formData.password !== formData.confirmPassword) {
+    newErrors.confirmPassword = "Passwords do not match";
+  }
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  setErrors(newErrors);
+  return Object.keys(newErrors).length === 0;
+};
+
 
  const handleSubmit = async (e) => {
   e.preventDefault();
@@ -90,6 +93,7 @@ const Register = () => {
 
   } catch (error) {
     alert("Server error. Please try again.");
+    console.error(error.message)
   }
 };
 

@@ -17,7 +17,7 @@ $data = json_decode(file_get_contents("php://input"), true);
 
 $firstName = $data["first_name"];
 $lastName = $data["last_name"];
-$idNumber= $data["idNumber"];
+$idNumber= $data["id_number"];
 $phone = $data["phone"];
 $dob = $data["dob"];
 $gender = $data["gender"];
@@ -35,7 +35,7 @@ $result = mysqli_query($con, $q);
 
 if(mysqli_num_rows($result)> 0){
     while($user = mysqli_fetch_assoc($result)){
-        if( $user['email']==$email && $user['password']==$password){
+        if( $user['email']==$email && password_verify($password ,$user['password'])){
             if(mysqli_query($con , $up)){
                 echo json_encode([
                 "status" => "success",

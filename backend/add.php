@@ -22,8 +22,7 @@ $data= json_decode(file_get_contents("php://input"), true);
     $city      = $data["city"];
     $region    = $data["region"];
     $email     = $data["email"];
-    // $password  = password_hash($data["password"], PASSWORD_DEFAULT);
-    $password=$data["password"];
+    $password  = password_hash($data["password"], PASSWORD_DEFAULT);
     $rdate     = date('Y/M');
 
 $sql = "INSERT INTO customers  VALUES  ('$firstName','$lastName','$idNumber','$phone','$dob','$gender','$address','$city','$region','$email','$password','$rdate')";

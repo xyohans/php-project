@@ -25,7 +25,7 @@ $result = mysqli_query($con, $q);
 
 if(mysqli_num_rows($result)> 0){
     while($user = mysqli_fetch_assoc($result)){
-        if( $user['email']==$email && $user['password']==$password){
+        if( $user['email']==$email && password_verify($password ,$user['password'])){
             if(mysqli_query($con , $up)){
                 
                 session_unset();
